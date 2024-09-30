@@ -24,16 +24,11 @@
                     <th>제목</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr id="board-list">
-                </tr>
-            </tbody>
+            <tbody id="boardList"></tbody>
         </table>
+        <div id="pagination"></div>
+        
         <!--
-        <th:block th:each="page : ${#numbers.sequence(startPage,endPage)}">
-            <a th:if="${page != nowPage}" th:href="@{/board/list(page = ${page-1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
-            <strong th:if="${page == nowPage}" th:text="${page}" style="color: red;"></strong>
-        </th:block>
         <form th:action="@{/board/list}" method="get">
             <input type="text" name="searchKeyword">
             <button type="submit">검색</button>
@@ -43,32 +38,30 @@
     </div>
 
     <script>
-        const boardListEl = document.getElementById('board-list');
+        let currentPage = 1;
+        const limit = 10;
 
-        function fetchBoardData() {
-            fetch('/api/board/list')
-                .then(response => response.json())
-                .then(data => {
-                    renderBoardList(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
+        // 게시물과 페이지 버튼을 렌더링하는 메인 함수
+        async function fetchAndRender(page) {
+            const response = await fetch(`/api/board/list?page=${page}&pageSize=${limit}`);
+            const {boardData,totalPage} = await response.json();
 
-        function renderBoardList(boards) {
-            boardListEl.innerHTML = '';
-            boards.forEach(board => {
-                const row = document.createElement('tr');
-                row.innerHTML=`
+            document.getElementById('boardList').innerHTML = boardData
+            .map(board => `
+                <tr>
                     <td>${board.id}</td>
                     <td><a href="/view/${board.id}">${board.title}</a></td>
-                `;
-                boardListEl.appendChild(row);
-            })
+                </tr>
+            `)
+            .join('');
+            
+            document.getElementById('pagination').innerHTML = Array.from({length: 5}, (_,i) => 
+                `<a href="#" style="margin:0 5px; ${i + 1 === page ? 'color:red;font-weight:bold;' : ''}" 
+                onclick="event.preventDefault(); fetchAndRender(${i + 1})">${i + 1}</a>`
+            ).join('');
         }
 
-        fetchBoardData();
+        fetchAndRender(currentPage); // 첫 페이지 로드 시 호출
     </script>
 </body>
 </html>

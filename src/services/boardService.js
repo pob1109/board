@@ -6,6 +6,14 @@ class BoardService{
         return dbQuery.getBoard();
     }
 
+    async getPagingBoard(page,pageSize){
+        const start = (page - 1) * pageSize;
+        const boardData = await dbQuery.getPagingBoard(start,pageSize);
+        const totalPageData = await dbQuery.countTotalPost();
+        const totalPage = Math.ceil(totalPageData[0]['COUNT(*)']/pageSize);
+        return {boardData,totalPage};
+    }
+
     async getPostById(id){
         return dbQuery.getPostById(id);
     }

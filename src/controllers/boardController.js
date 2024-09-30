@@ -3,8 +3,19 @@ const asyncHandler = require('express-async-handler')
 
 const boardController = {
     getBoard : asyncHandler(async(req, res, next) => {
-        const boardsData = await boardService.getBoard();
-        res.status(200).json(boardsData);
+        const pageInfo = req.query;
+        const page = parseInt(pageInfo.page);
+        const pageSize = parseInt(pageInfo.pageSize);
+        let boardData = null;
+
+        if(!page || !pageSize){
+            boardData = await boardService.getBoard();
+        }
+        else{
+            boardData = await boardService.getPagingBoard(page,pageSize);
+        }
+        
+        res.status(200).json(boardData);
     }),
 
     getPost : asyncHandler(async(req, res, next) => {
