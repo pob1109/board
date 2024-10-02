@@ -6,10 +6,10 @@ class BoardService{
         return dbQuery.getBoard();
     }
 
-    async getPagingBoard(page,pageSize){
+    async getPagingBoard(page,pageSize,searchKeyword){
         const start = (page - 1) * pageSize;
-        const boardData = await dbQuery.getPagingBoard(start,pageSize);
-        const totalPageData = await dbQuery.countTotalPost();
+        const boardData = await dbQuery.getPagingBoard(start,pageSize,searchKeyword);
+        const totalPageData = await dbQuery.countTotalPost(searchKeyword);
         const totalPage = Math.ceil(totalPageData[0]['COUNT(*)']/pageSize);
         return {boardData,totalPage};
     }

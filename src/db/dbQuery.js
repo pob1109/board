@@ -13,10 +13,10 @@ const executeQuery = (query, params = []) => {
 
 module.exports = {
     getBoard: () => executeQuery('SELECT * FROM board'),
-    getPagingBoard: (page,pageSize) => executeQuery('SELECT * FROM board LIMIT ?,?',[page,pageSize]),
+    getPagingBoard: (page,pageSize,searchKeyword) => executeQuery('SELECT * FROM board WHERE title LIKE ? LIMIT ?,? ',['%'+searchKeyword+'%',page,pageSize,]),
     getPostById: (id) => executeQuery('SELECT * FROM board WHERE id = ?', [id]),
     addNewPost: (title,content) => executeQuery('INSERT INTO board (title, content) VALUES (?, ?)',[title, content]),
     updatePost: (id,title,content) => executeQuery('UPDATE board SET title = ?, content = ? WHERE id = ?', [title,content,id]),
     deletePostById: (id) => executeQuery('DELETE FROM board WHERE id = ?',[id]),
-    countTotalPost: () => executeQuery('SELECT COUNT(*) FROM board'),
+    countTotalPost: (searchKeyword) => executeQuery('SELECT COUNT(*) FROM board WHERE title LIKE ?',['%'+searchKeyword+'%']),
 };

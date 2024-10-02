@@ -6,13 +6,14 @@ const boardController = {
         const pageInfo = req.query;
         const page = parseInt(pageInfo.page);
         const pageSize = parseInt(pageInfo.pageSize);
+        const searchKeyword = pageInfo.searchKeyword;
         let boardData = null;
 
         if(!page || !pageSize){
             boardData = await boardService.getBoard();
         }
         else{
-            boardData = await boardService.getPagingBoard(page,pageSize);
+            boardData = await boardService.getPagingBoard(page,pageSize,searchKeyword);
         }
         
         res.status(200).json(boardData);
