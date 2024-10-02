@@ -39,11 +39,12 @@
 
     <script>
         let currentPage = 1;
-        const limit = 10;
+        const pagelimit = 5;
+        const postlimit = 10;
 
         // 게시물과 페이지 버튼을 렌더링하는 메인 함수
-        async function fetchAndRender(page) {
-            const response = await fetch(`/api/board/list?page=${page}&pageSize=${limit}`);
+        async function renderPagination(page) {
+            const response = await fetch(`/api/board/list?page=${page}&pageSize=${postlimit}`);
             const {boardData,totalPage} = await response.json();
 
             document.getElementById('boardList').innerHTML = boardData
@@ -55,13 +56,33 @@
             `)
             .join('');
             
-            document.getElementById('pagination').innerHTML = Array.from({length: 5}, (_,i) => 
-                `<a href="#" style="margin:0 5px; ${i + 1 === page ? 'color:red;font-weight:bold;' : ''}" 
-                onclick="event.preventDefault(); fetchAndRender(${i + 1})">${i + 1}</a>`
-            ).join('');
+            const paginationEl = document.getElementById('pagination');
+            paginationEl.innerHTML = '';
+
+            const halfLimit = Math.floor(pagelimit / 2);
+            let startPage = Math.max(1, page - halfLimit);
+            let endPage = Math.min(totalPage, page + halfLimit);
+
+            if (startPage === 1) {
+                endPage = pagelimit;
+            }
+
+        // 끝 페이지 조정 (마지막 페이지 근처인 경우)
+            if (endPage === totalPage) {
+                startPage = totalPage - pagelimit + 1;
+            }
+
+            // 페이지 버튼 추가
+            for (let i = startPage; i <= endPage; i++) {
+                paginationEl.innerHTML += `<a href="#" style="margin: 0 5px; ${i === page ? 'font-weight: bold; color: red;' : ''}" onclick="fetchAndRender(${i},${totalPage})">${i}</a>`;
+            }
         }
 
-        fetchAndRender(currentPage); // 첫 페이지 로드 시 호출
+        function fetchAndRender(page,totalPage) {
+            renderPagination(page, totalPage);   // 페이지네이션 업데이트
+        }
+
+        renderPagination(currentPage); // 첫 페이지 로드 시 호출
     </script>
 </body>
 </html>
