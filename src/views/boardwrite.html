@@ -27,10 +27,9 @@
 
 <body>
     <div class="layout">
-        <form id="postForm"></form>
+        <form id="postForm" method="post">
             <input id="title" type="text" required placeholder="제목을 입력하세요">
-            <textarea id="content" required placeholder="내용을 입력하세요"></textarea>
-            <!--<input type="file" name="file">-->
+            <textarea id="content" type="text" required placeholder="내용을 입력하세요"></textarea>
             <button type="submit">게시물 작성</button>
         </form>
     </div>
@@ -52,13 +51,13 @@
             })
             .then(res => {
                 if(res.status === 201){
-                    alert("success");
+                    alert("작성에 성공했습니다.");
                     window.location.href = '/list';
                 }else{
                     alert("작성에 실패했습니다.");
                 }                    
             })
-            .catch(error => console.error('Error:',error));
+            .catch(error => console.error(error));
         })
     </script>
 </body>

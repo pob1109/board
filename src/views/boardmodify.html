@@ -27,10 +27,9 @@
 
 <body></body>
     <div class="layout">
-        <!-- 게시물 수정 폼 -->
         <form id="updateForm" method="post">
-            <input id="title" name="title" type="text" placeholder="제목을 입력하세요">
-            <textarea id="content" name="content" placeholder="내용을 입력하세요"></textarea>
+            <input id="title" type="text" required placeholder="제목을 입력하세요">
+            <textarea id="content" type="text" required placeholder="내용을 입력하세요"></textarea>
             <button type="submit">수정</button>
         </form>
     </div>
@@ -78,9 +77,7 @@
                     alert('게시물 수정에 실패했습니다.');
                 }
             })
-            .catch(error => {
-                console.error('수정 요청 중 오류가 발생했습니다:', error);
-            });
+            .catch(error => console.error('Error:', error))
         });
     </script>
 </body>

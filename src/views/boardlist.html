@@ -28,25 +28,35 @@
         </table>
         <div id="pagination"></div>
         
-        <!--
-        <form th:action="@{/board/list}" method="get">
-            <input type="text" name="searchKeyword">
+        
+        <form id="searchForm">
+            <input type="text" name="searchKeyword" id="searchKeyword" placeholder="검색어를 입력하세요">
             <button type="submit">검색</button>
         </form>
-        -->
+        
         <button type="button" onclick="location.href='/write'">글쓰기</button>
     </div>
 
     <script>
         let currentPage = 1;
         const pagelimit = 5;
-        const postlimit = 10;
+        const postlimit = 20;
+        let searchKeyword="";
 
+        //검색 기능 추가
+        document.getElementById('searchForm').addEventListener('submit',function(event){
+            event.preventDefault();
+            searchKeyword = document.getElementById('searchKeyword').value;
+            renderPagination(currentPage);
+        });
+        
         // 게시물과 페이지 버튼을 렌더링하는 메인 함수
         async function renderPagination(page) {
-            const response = await fetch(`/api/board/list?page=${page}&pageSize=${postlimit}`);
+            const response = await fetch(`/api/board/list?page=${page}&pageSize=${postlimit}&searchKeyword=${encodeURIComponent(searchKeyword)}`);
             const {boardData,totalPage} = await response.json();
+            
 
+            //게시글 리스트 생성
             document.getElementById('boardList').innerHTML = boardData
             .map(board => `
                 <tr>
@@ -63,23 +73,46 @@
             let startPage = Math.max(1, page - halfLimit);
             let endPage = Math.min(totalPage, page + halfLimit);
 
+            console.log(totalPage,startPage,endPage);
+            
+            // 첫 페이지 조정 (시작 페이지 근처인 경우)
             if (startPage === 1) {
                 endPage = pagelimit;
             }
 
-        // 끝 페이지 조정 (마지막 페이지 근처인 경우)
+            // 끝 페이지 조정 (마지막 페이지 근처인 경우)
             if (endPage === totalPage) {
                 startPage = totalPage - pagelimit + 1;
             }
 
+            //전체페이지 수가 페이지 리미트보다 작을때
+            if(totalPage <= pagelimit){
+                startPage = 1;
+                endPage = totalPage;
+            }
+
+            console.log(startPage,endPage);
+            //이전 버튼 추가
+            if(page !== 1){
+                paginationEl.innerHTML +=
+                     `<a href="#" style="margin: 0 5px; text-decoration-line: none"
+                      onclick="renderPagination(${page-1})"><</a>`;
+            }
+            
             // 페이지 버튼 추가
             for (let i = startPage; i <= endPage; i++) {
-                paginationEl.innerHTML += `<a href="#" style="margin: 0 5px; ${i === page ? 'font-weight: bold; color: red;' : ''}" onclick="fetchAndRender(${i},${totalPage})">${i}</a>`;
+                paginationEl.innerHTML +=
+                     `<a href="#" style="margin: 0 5px; text-decoration-line: none; ${i === page ? 'font-weight: bold; color: red;' : ''}"
+                      onclick="renderPagination(${i})">${i}</a>`;
             }
-        }
 
-        function fetchAndRender(page,totalPage) {
-            renderPagination(page, totalPage);   // 페이지네이션 업데이트
+            //다음 버튼 추가
+            if(page !== totalPage){
+                paginationEl.innerHTML +=
+                     `<a href="#" style="margin: 0 5px; text-decoration-line: none"
+                      onclick="renderPagination(${page+1})">></a>`;
+            }
+            
         }
 
         renderPagination(currentPage); // 첫 페이지 로드 시 호출
