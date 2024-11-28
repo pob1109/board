@@ -40,7 +40,7 @@
     <script>
         let currentPage = 1;
         const pagelimit = 5;
-        const postlimit = 10;
+        const postlimit = 20;
         let searchKeyword="";
 
         //검색 기능 추가
@@ -54,6 +54,7 @@
         async function renderPagination(page) {
             const response = await fetch(`/api/board/list?page=${page}&pageSize=${postlimit}&searchKeyword=${encodeURIComponent(searchKeyword)}`);
             const {boardData,totalPage} = await response.json();
+            
 
             //게시글 리스트 생성
             document.getElementById('boardList').innerHTML = boardData
@@ -71,6 +72,8 @@
             const halfLimit = Math.floor(pagelimit / 2);
             let startPage = Math.max(1, page - halfLimit);
             let endPage = Math.min(totalPage, page + halfLimit);
+
+            console.log(totalPage,startPage,endPage);
             
             // 첫 페이지 조정 (시작 페이지 근처인 경우)
             if (startPage === 1) {
@@ -82,6 +85,13 @@
                 startPage = totalPage - pagelimit + 1;
             }
 
+            //전체페이지 수가 페이지 리미트보다 작을때
+            if(totalPage <= pagelimit){
+                startPage = 1;
+                endPage = totalPage;
+            }
+
+            console.log(startPage,endPage);
             //이전 버튼 추가
             if(page !== 1){
                 paginationEl.innerHTML +=

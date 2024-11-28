@@ -51,13 +51,13 @@
             })
             .then(res => {
                 if(res.status === 201){
-                    alert("success");
+                    alert("작성에 성공했습니다.");
                     window.location.href = '/list';
                 }else{
                     alert("작성에 실패했습니다.");
                 }                    
             })
-            .catch(error => console.error('Error:',error));
+            .catch(error => console.error(error));
         })
     </script>
 </body>
