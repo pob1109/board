@@ -1,5 +1,5 @@
 const boardService = require('../services/boardService');
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require('express-async-handler');
 
 const boardController = {
     getBoard : asyncHandler(async(req, res, next) => {

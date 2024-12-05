@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 상세페이지</title>
+    <title>상세페이지</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <div id="header-container"></div>
     <h1 id="boardTitle"></h1>
     <p id="boardContent"></p>
 
@@ -13,6 +15,31 @@
     <!--<a th:href="@{${board.filepath}}">다운받기</a>-->
     <button id="modifyBtn">수정</a>
     <script>
+        $(document).ready(function() {
+            // header.html 파일을 로드하여 #header-container에 삽입
+            $("#header-container").load("/header.html", function(response, status, xhr) {
+                // 로드가 완료된 후, 로그인 상태에 따라 auth-links를 설정
+                const token = sessionStorage.getItem("authToken");
+                const authLinks = $("#auth-links");
+
+                if (token) {
+                    authLinks.html(`
+                        <span>Welcome, xxx!! </span>
+                        <button id="logout-btn">Logout</button>
+                    `);
+                    $("#logout-btn").on("click", function() {
+                        sessionStorage.removeItem("authToken");
+                        location.href = "/list";
+                    });
+                } else {
+                    authLinks.html(`
+                        <a href="/login">로그인</a>
+                        <a href="/signUp">회원가입</a>
+                    `);
+                }
+            });
+        });
+
         const postId = window.location.pathname.split('/').pop();
 
         if (postId) {

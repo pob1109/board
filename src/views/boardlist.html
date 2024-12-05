@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 리스트 페이지</title>
+    <title>게시판</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <style>
@@ -14,8 +15,9 @@
     }
 </style>
 
-
 <body>
+    <div id="header-container"></div> <!-- 외부 HTML을 삽입할 위치 -->
+
     <div class="layout">
         <table>
             <thead>
@@ -38,6 +40,31 @@
     </div>
 
     <script>
+        $(document).ready(function() {
+            // header.html 파일을 로드하여 #header-container에 삽입
+            $("#header-container").load("/header.html", function(response, status, xhr) {
+                // 로드가 완료된 후, 로그인 상태에 따라 auth-links를 설정
+                const token = sessionStorage.getItem("authToken");
+                const authLinks = $("#auth-links");
+
+                if (token) {
+                    authLinks.html(`
+                        <span>Welcome, xxx!! </span>
+                        <button id="logout-btn">Logout</button>
+                    `);
+                    $("#logout-btn").on("click", function() {
+                        sessionStorage.removeItem("authToken");
+                        location.href = "/list";
+                    });
+                } else {
+                    authLinks.html(`
+                        <a href="/login">로그인</a>
+                        <a href="/signUp">회원가입</a>
+                    `);
+                }
+            });
+        });
+
         let currentPage = 1;
         const pagelimit = 5;
         const postlimit = 20;
@@ -73,8 +100,6 @@
             let startPage = Math.max(1, page - halfLimit);
             let endPage = Math.min(totalPage, page + halfLimit);
 
-            console.log(totalPage,startPage,endPage);
-            
             // 첫 페이지 조정 (시작 페이지 근처인 경우)
             if (startPage === 1) {
                 endPage = pagelimit;
@@ -91,8 +116,7 @@
                 endPage = totalPage;
             }
 
-            console.log(startPage,endPage);
-            //이전 버튼 추가
+            //이전페이지 버튼 추가
             if(page !== 1){
                 paginationEl.innerHTML +=
                      `<a href="#" style="margin: 0 5px; text-decoration-line: none"
@@ -106,7 +130,7 @@
                       onclick="renderPagination(${i})">${i}</a>`;
             }
 
-            //다음 버튼 추가
+            //다음페이지 버튼 추가
             if(page !== totalPage){
                 paginationEl.innerHTML +=
                      `<a href="#" style="margin: 0 5px; text-decoration-line: none"

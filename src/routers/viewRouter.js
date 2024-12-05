@@ -18,4 +18,16 @@ viewRouter.get('/modify/:id',(req, res) => {
     res.sendFile(path.resolve(__dirname,'../views/boardmodify.html'));
 });
 
+viewRouter.get('/login',(req, res) => {
+    res.sendFile(path.resolve(__dirname,'../views/login.html'));
+});
+
+viewRouter.get('/signUp',(req, res) => {
+    res.sendFile(path.resolve(__dirname,'../views/signUp.html'));
+});
+
+viewRouter.get('/header.html', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../views/header.html'));
+  });
+
 module.exports = viewRouter;
