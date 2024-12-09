@@ -41,8 +41,18 @@ class UserService{
 
     async isSamePassword(password,password2){
         if(password !== password2){
-            throw errGenerator('비밀번호가 서로 다릅니다.',400)
+            throw errGenerator('비밀번호가 서로 다릅니다.',400);
         }
+    }
+
+    async readToken(authHeader){
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            throw errGenerator('로그인 상태가 아닙니다',401);
+        }
+        
+        const token = authHeader.split(' ')[1];
+        const verified = jwt.verify(token,process.env.KEY);
+        return verified.email;
     }
 
    /* 

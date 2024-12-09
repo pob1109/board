@@ -27,7 +27,7 @@
 </style>
 
 <body>
-    <div id="header-container"></div>
+    <header id="header"></header>
     <div class="layout">
         <form id="postForm" method="post">
             <input id="title" type="text" required placeholder="제목을 입력하세요">
@@ -36,32 +36,19 @@
         </form>
     </div>
         
-
     <script>
-        $(document).ready(function() {
-            // header.html 파일을 로드하여 #header-container에 삽입
-            $("#header-container").load("/header.html", function(response, status, xhr) {
-                // 로드가 완료된 후, 로그인 상태에 따라 auth-links를 설정
-                const token = sessionStorage.getItem("authToken");
-                const authLinks = $("#auth-links");
-
-                if (token) {
-                    authLinks.html(`
-                        <span>Welcome, xxx!! </span>
-                        <button id="logout-btn">Logout</button>
-                    `);
-                    $("#logout-btn").on("click", function() {
-                        sessionStorage.removeItem("authToken");
-                        location.href = "/list";
-                    });
-                } else {
-                    authLinks.html(`
-                        <a href="/login">로그인</a>
-                        <a href="/signUp">회원가입</a>
-                    `);
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                document.getElementById('header').innerHTML = data;
+                // header.html 내의 스크립트 실행
+                const scripts = document.getElementById('header').getElementsByTagName('script');
+                for (let script of scripts) {
+                    eval(script.textContent);  // 스크립트 실행
                 }
-            });
-        });
+            })
+            .catch(error => console.error('Error loading header:', error));
         
         document.getElementById('postForm').addEventListener('submit',function(event){
             event.preventDefault();

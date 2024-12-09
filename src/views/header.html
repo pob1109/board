@@ -89,6 +89,40 @@ body {
             <h1><a href="/list">게시판</a></h1>
             <li id="auth-links"></li>
         </div>
-    </header>  
+    </header>
+    <script>
+        const token = sessionStorage.getItem("authToken");
+        const authLinks = document.getElementById("auth-links");
+
+        if (token) {
+            fetch(`/api/user/readToken`,{
+                method: 'POST',
+                headers: {
+                    'authorization': token, // JSON 형식으로 데이터 전송
+                },
+            }).then(res => {
+                if(res.status!=200){
+                    throw new Error('로그인에 문제가 발생했습니다.');
+                }
+                return res.json();
+            }).then(email => {
+                authLinks.innerHTML=`
+                    <span>Welcome, ${email}!! </span>
+                    <button id="logout-btn">Logout</button>
+                `;
+                document.getElementById("logout-btn").addEventListener("click", function() {
+                    sessionStorage.removeItem("authToken");
+                    location.href = "/list";
+                });
+            }).catch(err =>{
+                throw new Error(err);
+            })
+        } else {
+            authLinks.innerHTML=`
+                <a href="/login">로그인</a>
+                <a href="/signUp">회원가입</a>
+            `;
+        }
+    </script>  
 </body>
 </html>
