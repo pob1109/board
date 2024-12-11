@@ -1,32 +1,32 @@
-const dbQuery = require('../db/dbQuery')
+const boardQuery = require('../db/boardQuery')
 
 class BoardModel{
 
     async getBoard(){
-        return dbQuery.getBoard();
+        return boardQuery.getBoard();
     }
 
     async getPagingBoard(page,pageSize,searchKeyword){
         const start = (page - 1) * pageSize;
-        const boardData = await dbQuery.getPagingBoard(start,pageSize,searchKeyword);
-        const totalPageData = await dbQuery.countTotalPost(searchKeyword);
+        const boardData = await boardQuery.getPagingBoard(start,pageSize,searchKeyword);
+        const totalPageData = await boardQuery.countTotalPost(searchKeyword);
         const totalPage = Math.ceil(totalPageData[0]['COUNT(*)']/pageSize);
         return {boardData,totalPage};
     }
 
     async getPostById(id){
-        return dbQuery.getPostById(id);
+        return boardQuery.getPostById(id);
     }
 
     async addNewPost(title,content,email){
-        return dbQuery.addNewPost(title,content,email);
+        return boardQuery.addNewPost(title,content,email);
     }
 
     async updatePost(id,title,content){
-        return dbQuery.updatePost(id,title,content);
+        return boardQuery.updatePost(id,title,content);
     }
     async deletePostById(id){
-        return dbQuery.deletePostById(id);
+        return boardQuery.deletePostById(id);
     }
 }
 
