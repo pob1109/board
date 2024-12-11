@@ -7,80 +7,80 @@
 </head>
 <style>
     /* 기본 스타일 */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
 
-/* 헤더 스타일 */
-#header {
-    background-color: #333;
-    color: white;
-    padding: 10px 0;
-}
+    /* 헤더 스타일 */
+    #header {
+        background-color: #333;
+        color: white;
+        padding: 10px 0;
+    }
 
-#header h1 {
-    margin: 0;
-    font-size: 24px;
-    display: inline-block;
-}
+    #header h1 {
+        margin: 0;
+        font-size: 24px;
+        display: inline-block;
+    }
 
-#header a {
-    color: white;
-    text-decoration: none;
-}
+    #header a {
+        color: white;
+        text-decoration: none;
+    }
 
-#header li {
-    list-style: none;
-    display: inline-block;
-    margin-left: 20px;
-}
+    #header li {
+        list-style: none;
+        display: inline-block;
+        margin-left: 20px;
+    }
 
-#auth-links {
-    float: right;
-    line-height: 40px;
-}
+    #auth-links {
+        float: right;
+        line-height: 40px;
+    }
 
-#auth-links a, #auth-links button {
-    color: white;
-    text-decoration: none;
-    background-color: transparent;
-    border: none;
-    padding: 8px 15px;
-    margin-left: 10px;
-    cursor: pointer;
-    font-size: 16px;
-}
+    #auth-links a, #auth-links button {
+        color: white;
+        text-decoration: none;
+        background-color: transparent;
+        border: none;
+        padding: 8px 15px;
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
 
-/* 로그인 상태일 때 스타일 */
-#auth-links button {
-    background-color: #e74c3c;
-    border-radius: 5px;
-}
+    /* 로그인 상태일 때 스타일 */
+    #auth-links button {
+        background-color: #e74c3c;
+        border-radius: 5px;
+    }
 
-#auth-links a:hover, #auth-links button:hover {
-    opacity: 0.8;
-}
+    #auth-links a:hover, #auth-links button:hover {
+        opacity: 0.8;
+    }
 
-/* 로그인하지 않았을 때 스타일 */
-#auth-links a {
-    background-color: #3498db;
-    border-radius: 5px;
-    padding: 8px 15px;
-    text-align: center;
-}
+    /* 로그인하지 않았을 때 스타일 */
+    #auth-links a {
+        background-color: #3498db;
+        border-radius: 5px;
+        padding: 8px 15px;
+        text-align: center;
+    }
 
-#auth-links a:hover {
-    background-color: #2980b9;
-}
+    #auth-links a:hover {
+        background-color: #2980b9;
+    }
 </style>
 
 <body>
@@ -90,39 +90,5 @@ body {
             <li id="auth-links"></li>
         </div>
     </header>
-    <script>
-        const token = sessionStorage.getItem("authToken");
-        const authLinks = document.getElementById("auth-links");
-
-        if (token) {
-            fetch(`/api/user/tokenToEmail`,{
-                method: 'POST',
-                headers: {
-                    'authorization': token, // JSON 형식으로 데이터 전송
-                },
-            }).then(res => {
-                if(res.status!=200){
-                    throw new Error('로그인에 문제가 발생했습니다.');
-                }
-                return res.json();
-            }).then(email => {
-                authLinks.innerHTML=`
-                    <span>Welcome, ${email}!! </span>
-                    <button id="logout-btn">Logout</button>
-                `;
-                document.getElementById("logout-btn").addEventListener("click", function() {
-                    sessionStorage.removeItem("authToken");
-                    location.href = "/list";
-                });
-            }).catch(err =>{
-                throw new Error(err);
-            })
-        } else {
-            authLinks.innerHTML=`
-                <a href="/login">로그인</a>
-                <a href="/signUp">회원가입</a>
-            `;
-        }
-    </script>  
 </body>
 </html>

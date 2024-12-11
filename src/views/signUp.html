@@ -4,59 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .form-container {
-            background: white;
-            padding: 20px 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        .form-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-container input {
-            width: 93%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .form-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .form-container button:hover {
-            background-color: #218838;
-        }
-        .form-container a {
-            display: block;
-            text-align: center;
-            margin-top: 10px;
-            color: #007BFF;
-            text-decoration: none;
-        }
-        .form-container a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .form-container {
+        background: white;
+        padding: 20px 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+    }
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .form-container input {
+        width: 93%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .form-container button {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .form-container button:hover {
+        background-color: #218838;
+    }
+    .form-container a {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        color: #007BFF;
+        text-decoration: none;
+    }
+    .form-container a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+
 <body>
     <div class="form-container">
         <h2>회원가입</h2>
@@ -70,35 +73,6 @@
     </div>
 </body>
 
-<script>
-    document.getElementById('signUpForm').addEventListener('submit',async function (event) {
-        event.preventDefault();
-
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const password2 = document.getElementById('password2').value;
-
-        try{
-            const response = await fetch('api/user/signUp',{
-                method:'POST',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body:JSON.stringify({email,password,password2}),
-            });
-
-            if (response.status==200){
-                alert('회원가입에 성공했습니다. 로그인해주세요');
-                window.location.href = '/login';
-            }else{
-                response.text().then(errMessage =>{
-                    alert(errMessage);
-                });
-            }
-        }catch(error){
-            console.error('회원가입 중 오류',error);
-        }
-    })
-</script>
+<script src="/js/signUp.js"></script>
 
 </html>

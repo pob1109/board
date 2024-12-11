@@ -1,6 +1,8 @@
 const express = require('express');
-const viewRouter = express.Router();
 const path = require('path');
+const viewRouter = express.Router();
+
+viewRouter.use(express.static(path.resolve(__dirname, '../public')));
 
 viewRouter.get('/list',(req, res) => {
     res.sendFile(path.resolve(__dirname, '../views/boardlist.html'));
@@ -26,8 +28,8 @@ viewRouter.get('/signUp',(req, res) => {
     res.sendFile(path.resolve(__dirname,'../views/signUp.html'));
 });
 
-viewRouter.get('/header.html', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../views/header.html'));
-  });
+viewRouter.get('/header',(req, res) => {
+    res.sendFile(path.resolve(__dirname,'../views/header.html'));
+});
 
 module.exports = viewRouter;

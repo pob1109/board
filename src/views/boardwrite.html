@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 작성폼</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <style>
@@ -35,52 +34,7 @@
             <button type="submit">게시물 작성</button>
         </form>
     </div>
-        
-    <script>
-        fetch('/header.html')
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
-                document.getElementById('header').innerHTML = data;
-                // header.html 내의 스크립트 실행
-                const scripts = document.getElementById('header').getElementsByTagName('script');
-                for (let script of scripts) {
-                    eval(script.textContent);  // 스크립트 실행
-                }
-            })
-            .catch(error => console.error('Error loading header:', error));
-        
-        //로그인 체크
-        const token = sessionStorage.getItem("authToken");
-        if (!token){
-            window.location.href = '/login';
-            alert("로그인 후에 사용할 수 있는 기능입니다.");
-        }
-    
-        document.getElementById('postForm').addEventListener('submit',function(event){
-            event.preventDefault();
-
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-
-            fetch('/api/board', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // JSON 형식으로 데이터 전송
-                    'authorization': token,
-                },
-                body: JSON.stringify({title,content}),
-            })
-            .then(res => {
-                if(res.status === 201){
-                    alert("작성에 성공했습니다.");
-                    window.location.href = '/list';
-                }else{
-                    alert("작성에 실패했습니다.");
-                }                    
-            })
-            .catch(error => console.error(error));
-        })
-    </script>
+    <script src="/js/header.js"></script>    
+    <script src="/js/boardwrite.js"></script>
 </body>
 </html>

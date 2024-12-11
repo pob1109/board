@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <style>
@@ -39,100 +38,7 @@
         
         <button type="button" id="writebtn">글쓰기</button>
     </div>
-    <script>
-        fetch('/header.html')
-            .then(response => response.text())
-            .then(header => {
-                document.getElementById('header').innerHTML = header;
-                // header.html 내의 스크립트 실행
-                const scripts = document.getElementById('header').getElementsByTagName('script');
-                for (let script of scripts) {
-                    eval(script.textContent);  // 스크립트 실행
-                }
-            })
-            .catch(error => console.error('Error loading header:', error));
-            
-        const currentPage = 1;
-        let searchKeyword="";
-
-        //검색 기능 추가
-        document.getElementById('searchForm').addEventListener('submit',function(event){
-            event.preventDefault();
-            searchKeyword = document.getElementById('searchKeyword').value;
-            renderPagination(currentPage);
-        });
-
-        //글쓰기버튼 기능
-        document.getElementById('writebtn').addEventListener('click',function(event){
-                window.location.href = '/write';
-        });
-        
-        // 게시물과 페이지 버튼을 렌더링하는 메인 함수
-        async function renderPagination(page) {
-            const pagelimit = 5;
-            const postlimit = 20;
-            const response = await fetch(`/api/board/list?page=${page}&pageSize=${postlimit}&searchKeyword=${encodeURIComponent(searchKeyword)}`);
-            const {boardData,totalPage} = await response.json();
-            
-
-            //게시글 리스트 생성
-            document.getElementById('boardList').innerHTML = boardData
-            .map(board => `
-                <tr>
-                    <td>${board.id}</td>
-                    <td><a href="/view/${board.id}">${board.title}</a></td>
-                    <td>${board.email}</td>
-                </tr>
-            `)
-            .join('');
-            
-            const paginationEl = document.getElementById('pagination');
-            paginationEl.innerHTML = '';
-
-            const halfLimit = Math.floor(pagelimit / 2);
-            let startPage = Math.max(1, page - halfLimit);
-            let endPage = Math.min(totalPage, page + halfLimit);
-
-            // 첫 페이지 조정 (시작 페이지 근처인 경우)
-            if (startPage === 1) {
-                endPage = pagelimit;
-            }
-
-            // 끝 페이지 조정 (마지막 페이지 근처인 경우)
-            if (endPage === totalPage) {
-                startPage = totalPage - pagelimit + 1;
-            }
-
-            //전체페이지 수가 페이지 리미트보다 작을때
-            if(totalPage <= pagelimit){
-                startPage = 1;
-                endPage = totalPage;
-            }
-
-            //이전페이지 버튼 추가
-            if(page !== 1){
-                paginationEl.innerHTML +=
-                     `<a href="#" style="margin: 0 5px; text-decoration-line: none"
-                      onclick="renderPagination(${page-1})"><</a>`;
-            }
-            
-            // 페이지 버튼 추가
-            for (let i = startPage; i <= endPage; i++) {
-                paginationEl.innerHTML +=
-                     `<a href="#" style="margin: 0 5px; text-decoration-line: none; ${i === page ? 'font-weight: bold; color: red;' : ''}"
-                      onclick="renderPagination(${i})">${i}</a>`;
-            }
-
-            //다음페이지 버튼 추가
-            if(page !== totalPage){
-                paginationEl.innerHTML +=
-                     `<a href="#" style="margin: 0 5px; text-decoration-line: none"
-                      onclick="renderPagination(${page+1})">></a>`;
-            }
-            
-        }
-
-        renderPagination(currentPage); // 첫 페이지 로드 시 호출    
-    </script>
+    <script src="/js/header.js"></script>
+    <script src="/js/boardlist.js"></script>
 </body>
 </html>
