@@ -1,6 +1,6 @@
 const dbQuery = require('../db/dbQuery')
 
-class BoardService{
+class BoardModel{
 
     async getBoard(){
         return dbQuery.getBoard();
@@ -30,5 +30,5 @@ class BoardService{
     }
 }
 
-const boardService = new BoardService;
-module.exports = boardService;
+const boardModel = new BoardModel;
+module.exports = boardModel;

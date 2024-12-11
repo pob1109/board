@@ -1,4 +1,4 @@
-document.getElementById('signUpForm').addEventListener('submit',async function (event) {
+document.getElementById('signUpForm').addEventListener('submit',async (event) => {
     event.preventDefault();
 
     const email = document.getElementById('email').value;

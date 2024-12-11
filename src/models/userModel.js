@@ -5,11 +5,7 @@ const dotenv = require('dotenv');
 const errGenerator = require('../middleware/errGenerator');
 dotenv.config();
 
-class UserService{
-
-    async hashingPassword(password){
-        return bcrypt.hashSync(password,bcrypt.genSaltSync(10));
-    }
+class UserModel{
     
     async signUpUser(email,password){
         const user = await userQuery.findUserByEmail(email);
@@ -39,24 +35,11 @@ class UserService{
             return token;
     }
 
-    async isSamePassword(password,password2){
-        if(password !== password2){
-            throw errGenerator('비밀번호가 서로 다릅니다.',400);
-        }
-    }
-
-   /* 
-    async updatePost(id,title,content){
-        return dbQuery.updatePost(id,title,content);
-    }*/
-
     async deleteUserByEmail(token){
-        console.log(token);
         await userQuery.deleteUserByEmail(token);
-        return 
     }
 
 }
 
-const userService = new UserService;
-module.exports = userService;
+const userModel = new UserModel;
+module.exports = userModel;
