@@ -45,16 +45,6 @@ class UserService{
         }
     }
 
-    async readToken(authHeader){
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            throw errGenerator('로그인 상태가 아닙니다',401);
-        }
-        
-        const token = authHeader.split(' ')[1];
-        const verified = jwt.verify(token,process.env.KEY);
-        return verified.email;
-    }
-
    /* 
     async updatePost(id,title,content){
         return dbQuery.updatePost(id,title,content);

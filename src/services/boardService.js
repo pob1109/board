@@ -18,8 +18,8 @@ class BoardService{
         return dbQuery.getPostById(id);
     }
 
-    async addNewPost(title,content){
-        return dbQuery.addNewPost(title,content);
+    async addNewPost(title,content,email){
+        return dbQuery.addNewPost(title,content,email);
     }
 
     async updatePost(id,title,content){

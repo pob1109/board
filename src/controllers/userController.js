@@ -16,9 +16,8 @@ const userController = {
         res.status(201).send('success');
     }),
 
-    readToken : asyncHandler(async(req,res,next) =>{
-        const authHeader = req.headers.authorization;
-        const email = await userService.readToken(authHeader);
+    tokenToEmail : asyncHandler(async(req, res, next) => {
+        const email = req.user;
         res.status(200).json(email);
     }),
 

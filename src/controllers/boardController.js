@@ -15,7 +15,7 @@ const boardController = {
         else{
             boardData = await boardService.getPagingBoard(page,pageSize,searchKeyword);
         }
-        
+
         res.status(200).json(boardData);
     }),
 
@@ -26,8 +26,9 @@ const boardController = {
     }),
 
     writePost : asyncHandler(async(req, res, next) => {
+        const email = req.user;
         const {title,content} = req.body;
-        await boardService.addNewPost(title,content);
+        await boardService.addNewPost(title,content,email);
         res.status(201).send('success');
     }),
 

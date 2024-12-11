@@ -95,7 +95,7 @@ body {
         const authLinks = document.getElementById("auth-links");
 
         if (token) {
-            fetch(`/api/user/readToken`,{
+            fetch(`/api/user/tokenToEmail`,{
                 method: 'POST',
                 headers: {
                     'authorization': token, // JSON 형식으로 데이터 전송
