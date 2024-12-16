@@ -1,4 +1,9 @@
 const postId = window.location.pathname.split('/').pop();
+const token = sessionStorage.getItem("authToken");
+if (!token){
+        window.location.href = '/login'
+        throw new Error('로그인 후에 사용할 수 있는 기능입니다.');
+}
 
 // 게시물 데이터 및 사용자 권한 확인
 async function fetchPostData() {
@@ -15,13 +20,6 @@ async function fetchPostData() {
 
 async function checkUser(boardEmail) {
     try {
-        const token = sessionStorage.getItem("authToken");
-
-        if (!token){
-                window.location.href = '/login'
-                throw new Error('로그인 후에 사용할 수 있는 기능입니다.');
-        }
-
         const tokenEmail = await fetch(`/api/user/tokenToEmail`, {
             method: 'POST',
             headers: { 'authorization': token },
@@ -46,9 +44,7 @@ document.getElementById('deleteBtn').addEventListener('click', async function ()
             if (confirm("정말 삭제하시겠습니까?")) {
                 const res = await fetch(`/api/board/${postId}`, { 
                     method: 'DELETE' ,
-                    headers: {
-                        'authorization': token
-                    },
+                    headers: {'authorization': token},
                 });
 
                 if (res.status === 200) {
