@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+</head>
+
+<style>
+    .layout{
+        width:500px;
+        margin:0 auto;
+        margin-top: 40px;
+    }
+</style>
+
+<body>
+    <header id="header"></header>
+
+    <div class="layout">
+        <table>
+            <thead>
+                <tr>
+                    <th>글번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                </tr>
+            </thead>
+            <tbody id="boardList"></tbody>
+        </table>
+        <div id="pagination"></div>
+        
+        
+        <form id="searchForm">
+            <input type="text" name="searchKeyword" id="searchKeyword" placeholder="검색어를 입력하세요">
+            <button type="submit">검색</button>
+        </form>
+        
+        <button type="button" id="writebtn">글쓰기</button>
+    </div>
+    <script src="/js/header.js"></script>
+    <script src="/js/boardlist.js"></script>
+</body>
+</html>
