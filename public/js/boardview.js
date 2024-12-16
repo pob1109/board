@@ -1,9 +1,4 @@
 const postId = window.location.pathname.split('/').pop();
-const token = sessionStorage.getItem("authToken");
-if (!token){
-        window.location.href = '/login'
-        throw new Error('로그인 후에 사용할 수 있는 기능입니다.');
-}
 
 // 게시물 데이터 및 사용자 권한 확인
 async function fetchPostData() {
@@ -20,6 +15,12 @@ async function fetchPostData() {
 
 async function checkUser(boardEmail) {
     try {
+        const token = sessionStorage.getItem("authToken");
+        if (!token){
+            window.location.href = '/login'
+            throw new Error('로그인 후에 사용할 수 있는 기능입니다.');
+        }
+
         const tokenEmail = await fetch(`/api/user/tokenToEmail`, {
             method: 'POST',
             headers: { 'authorization': token },
@@ -28,11 +29,11 @@ async function checkUser(boardEmail) {
         if (tokenEmail !== boardEmail) {
             throw new Error('작성자와 같은 유저가 아닙니다.');
         }
-        return true;
+        
+        return token;
     } catch (error) {
         console.error('사용자 확인 중 오류 발생:', error);
         alert(error);
-        return false;
     }
 }
 
@@ -40,7 +41,8 @@ async function checkUser(boardEmail) {
 document.getElementById('deleteBtn').addEventListener('click', async function () {
     try {
         const boardEmail = document.getElementById('boardEmail').innerText;
-        if (await checkUser(boardEmail)) {
+        const token = await checkUser(boardEmail);
+        if (token) {
             if (confirm("정말 삭제하시겠습니까?")) {
                 const res = await fetch(`/api/board/${postId}`, { 
                     method: 'DELETE' ,
