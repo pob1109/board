@@ -9,8 +9,8 @@ class UserModel{
     
     async signUpUser(email,password){
         const user = await userQuery.findUserByEmail(email);
-
-        if(user){
+        
+        if(user[0]){
             throw errGenerator('이미 존재하는 이메일입니다.',400);
         }
 

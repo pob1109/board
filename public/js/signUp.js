@@ -14,7 +14,7 @@ document.getElementById('signUpForm').addEventListener('submit',async (event) =>
             body:JSON.stringify({email,password,password2}),
         });
 
-        if (response.status==200){
+        if (response.status==201){
             alert('회원가입에 성공했습니다. 로그인해주세요');
             window.location.href = '/login';
         }else{
