@@ -19,7 +19,7 @@ async function checkUser(boardEmail) {
 
         if (!token){
                 window.location.href = '/login'
-                alert("로그인 후에 사용할 수 있는 기능입니다.");
+                throw new Error('로그인 후에 사용할 수 있는 기능입니다.');
         }
 
         const tokenEmail = await fetch(`/api/user/tokenToEmail`, {
@@ -28,13 +28,12 @@ async function checkUser(boardEmail) {
         }).then(res => res.json());
 
         if (tokenEmail !== boardEmail) {
-            alert('권한이 없습니다.');
-            return false;
+            throw new Error('작성자와 같은 유저가 아닙니다.');
         }
         return true;
     } catch (error) {
         console.error('사용자 확인 중 오류 발생:', error);
-        alert('사용자 정보를 확인할 수 없습니다.');
+        alert(error);
         return false;
     }
 }
@@ -45,7 +44,12 @@ document.getElementById('deleteBtn').addEventListener('click', async function ()
         const boardEmail = document.getElementById('boardEmail').innerText;
         if (await checkUser(boardEmail)) {
             if (confirm("정말 삭제하시겠습니까?")) {
-                const res = await fetch(`/api/board/${postId}`, { method: 'DELETE' });
+                const res = await fetch(`/api/board/${postId}`, { 
+                    method: 'DELETE' ,
+                    headers: {
+                        'authorization': token
+                    },
+                });
 
                 if (res.status === 200) {
                     alert('삭제되었습니다.');
