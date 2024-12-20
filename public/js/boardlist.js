@@ -73,7 +73,7 @@ function createPaginationButton(page, text, isActive = false) {
 // 게시글과 페이지네이션 렌더링
 async function renderPagination(page) {
     currentPage = page; // 현재 페이지 업데이트
-    const postLimit = 20;
+    const postLimit = 12;
 
     try {
         const { boardData, totalPage } = await fetchBoardData(page, postLimit);

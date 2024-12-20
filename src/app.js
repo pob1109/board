@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+
 const boardRouter = require('./routers/boardRouter');
 const userRouter = require('./routers/userRouter');
 const viewRouter = require('./routers/viewRouter');
@@ -17,3 +18,7 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+
+
+

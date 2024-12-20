@@ -1,16 +1,66 @@
-.layout{
-    width:500px;
-    margin:0 auto;
-    margin-top: 40px;
+*{
+    box-sizing: border-box;
 }
 
-.layout input{
-    width:100%;
-    box-sizing:border-box;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
 }
 
-.layout textarea{
-    width:100%;
-    margin-top:10px;
+.layout {
+    width: 700px;
+    margin: 40px auto;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 입력 폼 스타일 */
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+input[type="text"],textarea{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    resize: vertical;
+}
+
+textarea {
     min-height: 300px;
+}
+
+input[type="text"]:focus, textarea:focus {
+    border-color: #555;
+    outline: none;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 4px;
+    background-color: #555;
+    color: #fff;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #777;
+}
+
+button:active {
+    background-color: #444;
 }

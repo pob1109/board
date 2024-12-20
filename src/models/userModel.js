@@ -6,14 +6,15 @@ const errGenerator = require('../middleware/errGenerator');
 dotenv.config();
 
 class UserModel{
+    async findUser(email){
+        const user = await userQuery.findUserByEmail(email);
+        if(!user[0]){
+            return {email:undefined};
+        }
+        return user[0];
+    }
     
     async signUpUser(email,password){
-        const user = await userQuery.findUserByEmail(email);
-        
-        if(user[0]){
-            throw errGenerator('이미 존재하는 이메일입니다.',400);
-        }
-
         return userQuery.signUpUser(email,password);
     }
 
@@ -34,6 +35,8 @@ class UserModel{
 
             return token;
     }
+
+    //2. 비밀번호 바꾸는거(랜덤 비밀번호 만든다 -> 랜덤 비밀번호로 암호화한뒤에 바꿔(유저의 이메일이 필요) -> 이메일로 랜덤비밀번호를 전송 
 
     async deleteUserByEmail(token){
         await userQuery.deleteUserByEmail(token);

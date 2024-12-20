@@ -9,9 +9,14 @@ const userController = {
         res.status(200).setHeader("Authorization","Bearer "+jwtToken).send('success');
     }),
 
+    findUser : asyncHandler(async(req, res, next) => {
+        const email = req.params.email;
+        const user = await userModel.findUser(email);
+        res.status(200).json(user);
+    }),
+
     signUpUser : asyncHandler(async(req, res, next) => {
-        const {email, password,password2} = req.body;
-        await service.isSamePassword(password,password2);
+        const {email, password} = req.body;
         const hashingPassword = await service.hashingPassword(password);
         await userModel.signUpUser(email,hashingPassword);
         res.status(201).send('success');
@@ -19,7 +24,21 @@ const userController = {
 
     tokenToEmail : asyncHandler(async(req, res, next) => {
         const email = req.user;
-        res.status(200).json(email);
+        const user = await userModel.findUser(email);
+        res.status(200).json(user.email);
+    }),
+
+    sendEmail : asyncHandler(async(req,res,next) =>{
+        const email = req.params.email;
+        const code = await service.randomCode();
+        await service.sendEmail(email,code);
+        res.status(201).send('이메일을 전송했습니다.')
+    }),
+
+    checkCode : asyncHandler(async(req,res,next) =>{
+        const {email,code}=req.body;
+        await service.checkCode(email,code);
+        res.status(200).send('인증에 성공하였습니다.'); 
     }),
 
     /*modifyPassword : asyncHandler(async(req,res,next)=>{
