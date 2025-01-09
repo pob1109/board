@@ -4,7 +4,7 @@ async function loadHeader() {
         const response = await fetch('/header');
         document.getElementById('header').innerHTML = await response.text();
 
-        // Header 삽입 후 showHeader 호출
+        // Header 삽입 후 updateHeader 호출
         await updateHeader();
     } catch (error) {
         console.error('Header loading failed:', error.message);
@@ -21,10 +21,14 @@ async function updateHeader() {
             // 로그인 상태 UI
             authLinks.innerHTML = `
                 <span>Welcome, ${email}!! </span>
+                <button id="myPage">MyPage</button>
                 <button id="logout-btn">Logout</button>
             `;
             // 로그아웃 이벤트 추가
             document.getElementById("logout-btn").addEventListener("click", logout);
+            document.getElementById("myPage").addEventListener("click", ()=>{
+                window.location.href = `/myPage`;
+            });
         } else {
             // 비로그인 상태 UI
             authLinks.innerHTML = `
@@ -39,7 +43,6 @@ async function updateHeader() {
 
 async function getEmailFromToken(token) {
     const response = await fetch(`/api/user/tokenToEmail`, {
-        method: 'POST',
         headers: { 'authorization': token },
     });
     

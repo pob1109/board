@@ -7,14 +7,20 @@ const boardController = {
         const page = parseInt(pageInfo.page);
         const pageSize = parseInt(pageInfo.pageSize);
         const searchKeyword = pageInfo.searchKeyword;
-        let boardData = null;
 
-        if(!page || !pageSize){
-            boardData = await boardModel.getBoard();
-        }
-        else{
-            boardData = await boardModel.getPagingBoard(page,pageSize,searchKeyword);
-        }
+        const boardData = await boardModel.getPagingBoard(page,pageSize,searchKeyword);
+
+        res.status(200).json(boardData);
+    }),
+
+    getMyPage : asyncHandler(async(req, res, next) => {
+        const pageInfo = req.query;
+        const page = parseInt(pageInfo.page);
+        const pageSize = parseInt(pageInfo.pageSize);
+        const searchKeyword = pageInfo.searchKeyword;
+        const email = req.user;
+
+        const boardData = await boardModel.getPagingBoard(page,pageSize,searchKeyword,email);
 
         res.status(200).json(boardData);
     }),

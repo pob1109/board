@@ -18,7 +18,6 @@ async function fetchPostData(token) {
         const [postData, tokenEmail] = await Promise.all([
             fetch(`/api/board/post/${postId}`).then(res => res.json()),
             fetch(`/api/user/tokenToEmail`, {
-                method: 'POST',
                 headers: { 'authorization': token },
             }).then(res => res.json())
         ]);
@@ -38,7 +37,7 @@ async function fetchPostData(token) {
 }
 
 // 폼 제출 이벤트 처리
-document.getElementById('updateForm').addEventListener('submit', async function (event) {
+document.getElementById('updateForm').addEventListener('submit', async (event) => {
     event.preventDefault(); // 기본 제출 동작 방지
 
     const updatedTitle = document.getElementById('title').value;

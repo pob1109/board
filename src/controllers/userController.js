@@ -24,8 +24,7 @@ const userController = {
 
     tokenToEmail : asyncHandler(async(req, res, next) => {
         const email = req.user;
-        const user = await userModel.findUser(email);
-        res.status(200).json(user.email);
+        res.status(200).json(email);
     }),
 
     sendEmail : asyncHandler(async(req,res,next) =>{
@@ -48,8 +47,8 @@ const userController = {
     }),
 */
     deleteUser : asyncHandler(async(req, res, next) => {
-        const token = req.headers.Authorization;
-        await boardModel.deleteUserByEmail(token);
+        const email=req.user;
+        await userModel.deleteUserByEmail(email);
         res.status(200).send('success');
     })
 }

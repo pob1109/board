@@ -28,6 +28,10 @@ viewRouter.get('/signUp',(req, res) => {
     res.sendFile(path.resolve(__dirname,'../../views/signUp.html'));
 });
 
+viewRouter.get('/myPage',(req, res) => {
+    res.sendFile(path.resolve(__dirname,'../../views/myPage.html'));
+});
+
 viewRouter.get('/header',(req, res) => {
     res.sendFile(path.resolve(__dirname,'../../views/header.html'));
 });

@@ -6,10 +6,10 @@ class BoardModel{
         return boardQuery.getBoard();
     }
 
-    async getPagingBoard(page,pageSize,searchKeyword){
+    async getPagingBoard(page,pageSize,searchKeyword,email){
         const start = (page - 1) * pageSize;
-        const boardData = await boardQuery.getPagingBoard(start,pageSize,searchKeyword);
-        const totalPageData = await boardQuery.countTotalPost(searchKeyword);
+        const boardData = await boardQuery.getPagingBoard(start,pageSize,searchKeyword,email);
+        const totalPageData = await boardQuery.countTotalPost(searchKeyword,email);
         const totalPage = Math.ceil(totalPageData[0]['COUNT(*)']/pageSize);
         return {boardData,totalPage};
     }

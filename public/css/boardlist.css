@@ -110,26 +110,20 @@ table th:nth-child(3), table td:nth-child(3) {
 }
 
 /* 기본 버튼 스타일 */
-#pagination a {
+#pagination button {
     padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
     text-decoration: none;
     color: #333;
+    background-color: #fff;
     font-size: 14px;
     transition: background-color 0.3s, color 0.3s;
 }
 
 /* 마우스 오버 시 */
-#pagination a:hover {
+#pagination button:hover {
     background-color: #ddd;
     color: #000;
 }
 
-/* 활성화된 버튼 */
-#pagination a.active {
-    font-weight: bold;
-    background-color: #555;
-    color: #fff;
-    border: 1px solid #444;
-}

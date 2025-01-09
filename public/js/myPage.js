@@ -1,21 +1,46 @@
 let currentPage = 1;
 let searchKeyword = "";
+const token = sessionStorage.getItem("authToken");
+
+if(!token){
+    alert("로그인 후에 사용할 수 있는 기능입니다.");
+    window.location.href = '/login';
+}
 
 // 검색 기능
-document.getElementById('searchForm').addEventListener('submit', (event) => {
+document.getElementById('searchForm').addEventListener('submit', function (event) {
     event.preventDefault();
     searchKeyword = document.getElementById('searchKeyword').value.trim();
     renderPagination(1); // 검색 시 첫 페이지로 이동
 });
 
-// 글쓰기 버튼 기능
-document.getElementById('writebtn').addEventListener('click', () => {
-    window.location.href = '/write';
+// 회원탈퇴 버튼 기능
+document.getElementById('withdrawBtn').addEventListener('click', async () => {
+    try{
+        if(confirm('정말로 회원탈퇴 하시겠습니까?')){
+            const res = await fetch('/api/user',{
+                method:'DELETE',
+                headers: { 'authorization': token },
+            });
+            if(res.status==200){
+                sessionStorage.removeItem("authToken");
+                location.href = "/list";
+                alert('성공적으로 회원탈퇴하였습니다.');
+            }else{
+                throw new Error('Failed to delete user');
+            }
+        }
+    }catch(err){
+        console.error(err);
+        alert('탈퇴에 실패했습니다.');
+    }
 });
 
 // 게시물 렌더링 함수
-async function fetchBoardData(page, postLimit) {
-    const response = await fetch(`/api/board/list?page=${page}&pageSize=${postLimit}&searchKeyword=${encodeURIComponent(searchKeyword)}`);
+async function fetchBoardData(page, postLimit,token) {
+    const response = await fetch(`/api/board/myPage?page=${page}&pageSize=${postLimit}&searchKeyword=${encodeURIComponent(searchKeyword)}`,{
+        headers: { 'authorization': token },
+    });
     return response.json();
 }
 
@@ -32,7 +57,7 @@ function renderBoardList(boardData) {
         .join('');
 }
 
-//전체 페이지네이션 버튼 생성
+// 전체 페이지네이션 버튼 생성
 function renderPaginationButtons(page, totalPage) {
     const paginationEl = document.getElementById('pagination');
     const pagelimit = 5;
@@ -70,7 +95,7 @@ async function renderPagination(page) {
     const postLimit = 12;
 
     try {
-        const { boardData, totalPage } = await fetchBoardData(page, postLimit);
+        const { boardData, totalPage } = await fetchBoardData(page,postLimit,token);
         renderBoardList(boardData); // 게시글 렌더링
         renderPaginationButtons(page, totalPage); // 페이지네이션 렌더링
     } catch (error) {

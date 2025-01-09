@@ -5,6 +5,7 @@ const {isSameUser} = require('../middleware/isSameUser');
 const boardRouter = express.Router();
 
 boardRouter.get('/list', boardController.getBoard);
+boardRouter.get('/myPage',readToken,boardController.getMyPage);
 boardRouter.get('/post/:id', boardController.getPost);
 boardRouter.post('/',readToken,boardController.writePost);
 boardRouter.put('/:id',readToken,isSameUser,boardController.modifyPost);

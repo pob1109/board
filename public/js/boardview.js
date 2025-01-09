@@ -22,7 +22,7 @@ async function checkUser(boardEmail) {
         }
 
         const tokenEmail = await fetch(`/api/user/tokenToEmail`, {
-            method: 'POST',
+            method: 'GET',
             headers: { 'authorization': token },
         }).then(res => res.json());
 
@@ -38,7 +38,7 @@ async function checkUser(boardEmail) {
 }
 
 // 삭제 버튼 기능
-document.getElementById('deleteBtn').addEventListener('click', async function () {
+document.getElementById('deleteBtn').addEventListener('click', async () => {
     try {
         const boardEmail = document.getElementById('boardEmail').innerText;
         const token = await checkUser(boardEmail);
